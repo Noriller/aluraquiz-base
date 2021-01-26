@@ -48,8 +48,9 @@ class MathOperation {
   getAnswerArray ( result ) {
     const resultSpreader = new Set();
     resultSpreader.add( 0 );
-    while ( resultSpreader.size < 5 )
-      resultSpreader.add( this.randomResultSpreader( result ) );
+    while ( resultSpreader.size < 5 ) {
+      resultSpreader.add( this.randomResultSpreader( result, resultSpreader ) );
+    }
 
     const spreaderArray = [ ...resultSpreader ];
 
@@ -63,8 +64,13 @@ class MathOperation {
     return this.shuffleAnswer( answerArray );
   }
 
-  randomResultSpreader ( result ) {
-    return this.getRandom( Math.floor( result / 10 ), Math.floor( result / 2 ) );
+  randomResultSpreader ( result, resultSpreader ) {
+    const newTry = this.getRandom( Math.floor( result / 10 ), Math.floor( result / 2 ) );
+    return this.newNumberOrIncrement( resultSpreader, newTry );
+  }
+
+  newNumberOrIncrement ( resultSpreader, newTry ) {
+    return resultSpreader.has( newTry ) ? this.newNumberOrIncrement( resultSpreader, newTry + 1 ) : newTry;
   }
 
   shuffleAnswer ( array ) {
@@ -118,7 +124,7 @@ class Multiplication extends MathOperation {
     const secondValue = this.limiter ? this.getRandom( this.lowerBoundary, this.limiter ) : this.getRandom();
     const result = firstValue * secondValue;
     const answerArray = this.getAnswerArray( result );
-    
+
     return {
       "value": `${ firstValue } * ${ secondValue } = ???`,
       "result": result,

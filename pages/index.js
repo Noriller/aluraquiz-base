@@ -8,12 +8,14 @@ import GitHubCorner from '../src/components/GitHubCorner'
 import QuestionGenerator from '../src/generator';
 
 const teste = db.questions;
+const coisa = []
 teste.forEach( q => {
   const load = q.questionLoad;
   const question = new QuestionGenerator( load );
-  console.log( question );
+  coisa.push( question );
 } )
 
+console.log( coisa );
 
 export const QuizContainer = styled.div`
   width: 100%;
