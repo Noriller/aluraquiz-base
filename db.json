@@ -5,123 +5,103 @@
   "questions": [
     {
       "image": "https://media4.giphy.com/media/4QER0v8n6c5uRrp3dO/giphy.gif",
-      "title": "",
-      "description": "",
-      "answer": null,
-      "alternatives": [
-        "",
-        "",
-        "",
-        ""
-      ]
+      "title": "A simple addition: ",
+      "description": "Just to warm up.",
+      "questionLoad": {
+        "type": "addition",
+        "lowerBoundary": 1,
+        "upperBoundary": 10
+      }
     },
     {
       "image": "https://media2.giphy.com/media/xT5LMINTLCSOGdIyEo/source.gif",
-      "title": "",
-      "description": "",
-      "answer": null,
-      "alternatives": [
-        "",
-        "",
-        "",
-        ""
-      ]
+      "title": "Now a simple subtraction: ",
+      "description": "Just to see if you're paying attention.",
+      "questionLoad": {
+        "type": "subtraction",
+        "lowerBoundary": 1,
+        "upperBoundary": 10
+      }
     },
     {
       "image": "https://media1.giphy.com/media/l2Je3qSgOVvFPdaNi/source.gif",
-      "title": "",
-      "description": "",
-      "answer": null,
-      "alternatives": [
-        "",
-        "",
-        "",
-        ""
-      ]
+      "title": "Multiplication: ",
+      "description": "Still easy right?",
+      "questionLoad": {
+        "type": "multiplication",
+        "lowerBoundary": 2,
+        "upperBoundary": 10
+      }
     },
     {
       "image": "https://media1.giphy.com/media/3o7qE1Thg4KxFpMGSk/giphy.gif",
-      "title": "",
-      "description": "",
-      "answer": null,
-      "alternatives": [
-        "",
-        "",
-        "",
-        ""
-      ]
+      "title": "Division: ",
+      "description": "Piece of cake.",
+      "questionLoad": {
+        "type": "division",
+        "lowerBoundary": 2,
+        "upperBoundary": 10
+      }
     },
     {
       "image": "https://media0.giphy.com/media/l378bl7lVJ1XAMRFu/giphy.gif",
-      "title": "",
-      "description": "",
-      "answer": null,
-      "alternatives": [
-        "",
-        "",
-        "",
-        ""
-      ]
+      "title": "A little harder addition: ",
+      "description": "Let's pick up the pace.",
+      "questionLoad": {
+        "type": "addition",
+        "lowerBoundary": 10,
+        "upperBoundary": 100
+      }
     },
     {
       "image": "https://media4.giphy.com/media/3orieTk2lWWuurEq9W/source.gif",
-      "title": "",
-      "description": "",
-      "answer": null,
-      "alternatives": [
-        "",
-        "",
-        "",
-        ""
-      ]
+      "title": "And a bigger subtraction: ",
+      "description": "Still in the basic stuff.",
+      "questionLoad": {
+        "type": "subtraction",
+        "lowerBoundary": 10,
+        "upperBoundary": 100
+      }
     },
     {
       "image": "https://media4.giphy.com/media/3owzW79Y5BSGp7fBgQ/giphy.gif",
-      "title": "",
-      "description": "",
-      "answer": null,
-      "alternatives": [
-        "",
-        "",
-        "",
-        ""
-      ]
+      "title": "And now, a multiplication: ",
+      "description": "Should I make it harder?",
+      "questionLoad": {
+        "type": "multiplication",
+        "lowerBoundary": 2,
+        "upperBoundary": 100
+      }
     },
     {
       "image": "https://media4.giphy.com/media/3o6Mb7m2Gr4xmZnjxu/200_d.gif",
-      "title": "",
-      "description": "",
-      "answer": null,
-      "alternatives": [
-        "",
-        "",
-        "",
-        ""
-      ]
+      "title": "A dreaded division: ",
+      "description": "Still sane?",
+      "questionLoad": {
+        "type": "division",
+        "lowerBoundary": 2,
+        "upperBoundary": 100
+      }
     },
     {
       "image": "https://media1.giphy.com/media/DHqth0hVQoIzS/200.gif",
-      "title": "",
-      "description": "",
-      "answer": null,
-      "alternatives": [
-        "",
-        "",
-        "",
-        ""
-      ]
+      "title": "How about this big Multiplication: ",
+      "description": "The calculator is right there. :)",
+      "questionLoad": {
+        "type": "multiplication",
+        "lowerBoundary": 11,
+        "upperBoundary": 100
+      }
     },
     {
       "image": "https://media0.giphy.com/media/WRQBXSCnEFJIuxktnw/200.gif",
-      "title": "",
-      "description": "",
-      "answer": null,
-      "alternatives": [
-        "",
-        "",
-        "",
-        ""
-      ]
+      "title": "Let's finish with a division: ",
+      "description": "So, could you complete this without a calculator?",
+      "questionLoad": {
+        "type": "division",
+        "lowerBoundary": 11,
+        "upperBoundary": 100
+      }
     }
   ],
   "external": [""],
