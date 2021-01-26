@@ -2,14 +2,27 @@
 class QuestionGenerator {
 
   constructor ( questionLoad ) {
-    console.log( questionLoad );
     this.lowerBoundary = questionLoad.lowerBoundary;
     this.upperBoundary = questionLoad.upperBoundary;
 
-    const coisa = new Addition( this.lowerBoundary, this.upperBoundary );
-    const coisa2 = new Subtraction( this.lowerBoundary, this.upperBoundary );
-    console.log( coisa.getQuestion() );
-    console.log( coisa2.getQuestion() );
+    switch ( questionLoad.type ) {
+      case 'addition':
+        this.question = new Addition( this.lowerBoundary, this.upperBoundary );
+        break;
+      case 'subtraction':
+        this.question = new Subtraction( this.lowerBoundary, this.upperBoundary );
+        break;
+      case 'multiplication':
+        this.question = new Multiplication( this.lowerBoundary, this.upperBoundary );
+        break;
+      case 'division':
+        this.question = new Division( this.lowerBoundary, this.upperBoundary );
+        break;
+      default:
+        throw new Error( 'Something went wrong.' );
+    }
+
+    return this.question.getQuestion();
   }
 }
 
@@ -60,7 +73,7 @@ class Addition extends MathOperation {
     ]
 
     return {
-      "value": `${ firstValue } - ${ secondValue } = ???`,
+      "value": `${ firstValue } + ${ secondValue } = ???`,
       "result": result,
       "answerArray": this.shuffleAnswer( answerArray )
     };
@@ -83,16 +96,53 @@ class Subtraction extends MathOperation {
     ];
 
     return {
-      "value": `${ firstIsBigger ? firstValue : secondValue } + ${ firstIsBigger ? secondValue : firstValue } = ???`,
+      "value": `${ firstIsBigger ? firstValue : secondValue } - ${ firstIsBigger ? secondValue : firstValue } = ???`,
       "result": result,
       "answerArray": this.shuffleAnswer( answerArray )
     };
   }
 }
 
-const coisa = {
-  "type": "addition",
-  "lowerBoundary": 1,
-  "upperBoundary": 10
-};
-console.log( new QuestionGenerator( coisa ) );
+class Multiplication extends MathOperation {
+  getQuestion () {
+    const firstValue = this.getRandom();
+    const secondValue = this.getRandom();
+    const result = firstValue * secondValue;
+    const resultSpreader = ( result % 2 === 0 ) ? 2 : 1;
+    const answerArray = [
+      result - resultSpreader * 2,
+      result - resultSpreader,
+      result,
+      result + resultSpreader,
+      result + resultSpreader * 2
+    ];
+
+    return {
+      "value": `${ firstValue } * ${ secondValue } = ???`,
+      "result": result,
+      "answerArray": this.shuffleAnswer( answerArray )
+    };
+  }
+}
+
+class Division extends MathOperation {
+  getQuestion () {
+    const firstValue = this.getRandom();
+    const secondValue = this.getRandom() * firstValue;
+    const result = secondValue / firstValue;
+    const resultSpreader = ( result % 2 === 0 ) ? 2 : 1;
+    const answerArray = [
+      result - resultSpreader * 2,
+      result - resultSpreader,
+      result,
+      result + resultSpreader,
+      result + resultSpreader * 2
+    ];
+
+    return {
+      "value": `${ secondValue } / ${ firstValue } = ???`,
+      "result": result,
+      "answerArray": this.shuffleAnswer( answerArray )
+    };
+  }
+}
