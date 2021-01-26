@@ -70,7 +70,8 @@
       "questionLoad": {
         "type": "multiplication",
         "lowerBoundary": 2,
-        "upperBoundary": 100
+        "limiter": 10,
+        "upperBoundary": 20
       }
     },
     {
@@ -80,7 +81,8 @@
       "questionLoad": {
         "type": "division",
         "lowerBoundary": 2,
-        "upperBoundary": 100
+        "limiter": 10,
+        "upperBoundary": 20
       }
     },
     {
@@ -90,6 +92,7 @@
       "questionLoad": {
         "type": "multiplication",
         "lowerBoundary": 11,
+        "limiter": 20,
         "upperBoundary": 100
       }
     },
@@ -100,6 +103,7 @@
       "questionLoad": {
         "type": "division",
         "lowerBoundary": 11,
+        "limiter": 20,
         "upperBoundary": 100
       }
     }

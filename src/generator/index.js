@@ -1,9 +1,10 @@
 
-class QuestionGenerator {
+export default class QuestionGenerator {
 
   constructor ( questionLoad ) {
     this.lowerBoundary = questionLoad.lowerBoundary;
     this.upperBoundary = questionLoad.upperBoundary;
+    this.limiter = questionLoad.limiter || null;
 
     switch ( questionLoad.type ) {
       case 'addition':
@@ -13,10 +14,10 @@ class QuestionGenerator {
         this.question = new Subtraction( this.lowerBoundary, this.upperBoundary );
         break;
       case 'multiplication':
-        this.question = new Multiplication( this.lowerBoundary, this.upperBoundary );
+        this.question = new Multiplication( this.lowerBoundary, this.upperBoundary, this.limiter );
         break;
       case 'division':
-        this.question = new Division( this.lowerBoundary, this.upperBoundary );
+        this.question = new Division( this.lowerBoundary, this.upperBoundary, this.limiter );
         break;
       default:
         throw new Error( 'Something went wrong.' );
@@ -27,22 +28,43 @@ class QuestionGenerator {
 }
 
 class MathOperation {
-  constructor ( lowerBoundary, upperBoundary ) {
+  constructor ( lowerBoundary, upperBoundary, limiter ) {
     this.lowerBoundary = lowerBoundary;
     this.upperBoundary = upperBoundary;
+    this.limiter = limiter || null;
     if ( new.target === MathOperation ) {
       throw new TypeError( "Cannot construct MathOperation instances directly" );
     }
   }
 
-  getRandom () {
-    const min = this.lowerBoundary;
-    const max = this.upperBoundary;
+  getRandom ( min = this.lowerBoundary, max = this.upperBoundary ) {
     return Math.floor( Math.random() * ( max - min + 1 ) ) + min;
   }
 
   getQuestion () {
     throw new Error( 'You have to implement the method do something!' );
+  }
+
+  getAnswerArray ( result ) {
+    const resultSpreader = new Set();
+    resultSpreader.add( 0 );
+    while ( resultSpreader.size < 5 )
+      resultSpreader.add( this.randomResultSpreader( result ) );
+
+    const spreaderArray = [ ...resultSpreader ];
+
+    const answerArray = [
+      result - spreaderArray[ 1 ],
+      result - spreaderArray[ 2 ],
+      result,
+      result + spreaderArray[ 3 ],
+      result + spreaderArray[ 4 ]
+    ];
+    return this.shuffleAnswer( answerArray );
+  }
+
+  randomResultSpreader ( result ) {
+    return this.getRandom( Math.floor( result / 10 ), Math.floor( result / 2 ) );
   }
 
   shuffleAnswer ( array ) {
@@ -63,21 +85,15 @@ class Addition extends MathOperation {
     const firstValue = this.getRandom();
     const secondValue = this.getRandom();
     const result = firstValue + secondValue;
-    const resultSpreader = ( result % 2 === 0 ) ? 2 : 1;
-    const answerArray = [
-      result - resultSpreader * 2,
-      result - resultSpreader,
-      result,
-      result + resultSpreader,
-      result + resultSpreader * 2
-    ]
+    const answerArray = this.getAnswerArray( result );
 
     return {
       "value": `${ firstValue } + ${ secondValue } = ???`,
       "result": result,
-      "answerArray": this.shuffleAnswer( answerArray )
+      "answerArray": answerArray
     };
   }
+
 }
 
 class Subtraction extends MathOperation {
@@ -86,19 +102,12 @@ class Subtraction extends MathOperation {
     const secondValue = this.getRandom();
     const firstIsBigger = firstValue >= secondValue ? true : false;
     const result = firstIsBigger ? firstValue - secondValue : secondValue - firstValue;
-    const resultSpreader = ( result % 2 === 0 ) ? 2 : 1;
-    const answerArray = [
-      result - resultSpreader * 2,
-      result - resultSpreader,
-      result,
-      result + resultSpreader,
-      result + resultSpreader * 2
-    ];
+    const answerArray = this.getAnswerArray( result );
 
     return {
       "value": `${ firstIsBigger ? firstValue : secondValue } - ${ firstIsBigger ? secondValue : firstValue } = ???`,
       "result": result,
-      "answerArray": this.shuffleAnswer( answerArray )
+      "answerArray": answerArray
     };
   }
 }
@@ -106,43 +115,57 @@ class Subtraction extends MathOperation {
 class Multiplication extends MathOperation {
   getQuestion () {
     const firstValue = this.getRandom();
-    const secondValue = this.getRandom();
+    const secondValue = this.limiter ? this.getRandom( this.lowerBoundary, this.limiter ) : this.getRandom();
     const result = firstValue * secondValue;
-    const resultSpreader = ( result % 2 === 0 ) ? 2 : 1;
-    const answerArray = [
-      result - resultSpreader * 2,
-      result - resultSpreader,
-      result,
-      result + resultSpreader,
-      result + resultSpreader * 2
-    ];
-
+    const answerArray = this.getAnswerArray( result );
+    
     return {
       "value": `${ firstValue } * ${ secondValue } = ???`,
       "result": result,
-      "answerArray": this.shuffleAnswer( answerArray )
+      "answerArray": answerArray
     };
   }
 }
 
 class Division extends MathOperation {
   getQuestion () {
-    const firstValue = this.getRandom();
+    const firstValue = this.limiter ? this.getRandom( this.lowerBoundary, this.limiter ) : this.getRandom();
     const secondValue = this.getRandom() * firstValue;
     const result = secondValue / firstValue;
-    const resultSpreader = ( result % 2 === 0 ) ? 2 : 1;
-    const answerArray = [
-      result - resultSpreader * 2,
-      result - resultSpreader,
-      result,
-      result + resultSpreader,
-      result + resultSpreader * 2
-    ];
+    const answerArray = this.getAnswerArray( result );
 
     return {
       "value": `${ secondValue } / ${ firstValue } = ???`,
       "result": result,
-      "answerArray": this.shuffleAnswer( answerArray )
+      "answerArray": answerArray
     };
   }
 }
+
+
+let coisa = {
+  "type": "division",
+  "lowerBoundary": 2,
+  "upperBoundary": 20
+};
+console.log( new QuestionGenerator( coisa ) );
+coisa = {
+  "type": "multiplication",
+  "lowerBoundary": 2,
+  "upperBoundary": 20
+};
+console.log( new QuestionGenerator( coisa ) );
+coisa = {
+  "type": "multiplication",
+  "lowerBoundary": 2,
+  "limiter": 20,
+  "upperBoundary": 100
+};
+console.log( new QuestionGenerator( coisa ) );
+coisa = {
+  "type": "division",
+  "lowerBoundary": 2,
+  "limiter": 20,
+  "upperBoundary": 100
+};
+console.log( new QuestionGenerator( coisa ) );
