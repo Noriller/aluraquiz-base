@@ -141,31 +141,3 @@ class Division extends MathOperation {
     };
   }
 }
-
-
-let coisa = {
-  "type": "division",
-  "lowerBoundary": 2,
-  "upperBoundary": 20
-};
-console.log( new QuestionGenerator( coisa ) );
-coisa = {
-  "type": "multiplication",
-  "lowerBoundary": 2,
-  "upperBoundary": 20
-};
-console.log( new QuestionGenerator( coisa ) );
-coisa = {
-  "type": "multiplication",
-  "lowerBoundary": 2,
-  "limiter": 20,
-  "upperBoundary": 100
-};
-console.log( new QuestionGenerator( coisa ) );
-coisa = {
-  "type": "division",
-  "lowerBoundary": 2,
-  "limiter": 20,
-  "upperBoundary": 100
-};
-console.log( new QuestionGenerator( coisa ) );
