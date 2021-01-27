@@ -87,8 +87,8 @@
     },
     {
       "image": "https://media1.giphy.com/media/DHqth0hVQoIzS/200.gif",
-      "title": "How about this big Multiplication: ",
-      "description": "The calculator is right there. :)",
+      "title": "How about this big multiplication: ",
+      "description": "The calculator is right there. 😀",
       "questionLoad": {
         "type": "multiplication",
         "lowerBoundary": 11,

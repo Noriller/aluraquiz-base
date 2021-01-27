@@ -12,16 +12,6 @@ import GitHubCorner from '../src/components/GitHubCorner';
 import Input from '../src/components/Input';
 import Button from '../src/components/Button';
 
-const teste = db.questions;
-const coisa = []
-teste.forEach( q => {
-  const load = q.questionLoad;
-  const question = new QuestionGenerator( load );
-  coisa.push( question );
-} )
-
-console.log( coisa );
-
 const QuizContainer = styled.div`
   width: 100%;
   max-width: 350px;

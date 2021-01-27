@@ -6,6 +6,7 @@ import QuizLogo from '../src/components/QuizLogo';
 import QuizBackground from '../src/components/QuizBackground';
 import QuizContainer from '../src/components/QuizContainer';
 import Button from '../src/components/Button';
+import QuestionGenerator from '../src/QuestionGenerator';
 
 function LoadingWidget() {
   return (
@@ -27,7 +28,10 @@ function QuestionWidget({
   totalQuestions,
   onSubmit,
 }) {
-  const questionId = `question__${questionIndex}`;
+  const questionId = `question__${ questionIndex }`;
+  const { value: mathQuestion, result, answerArray } = new QuestionGenerator( question.questionLoad );
+  console.log( mathQuestion, result, answerArray )
+
   return (
     <Widget>
       <Widget.Header>
@@ -42,13 +46,14 @@ function QuestionWidget({
         style={{
           width: '100%',
           height: '150px',
-          objectFit: 'cover',
+          objectFit: 'contain',
         }}
         src={question.image}
       />
       <Widget.Content>
         <h2>
-          {question.title}
+          <div>{ question.title }</div>
+          <div>{ mathQuestion }</div>
         </h2>
         <p>
           {question.description}
@@ -60,7 +65,7 @@ function QuestionWidget({
             onSubmit();
           }}
         >
-          {question.alternatives.map((alternative, alternativeIndex) => {
+          { answerArray.map( ( alternative, alternativeIndex ) => {
             const alternativeId = `alternative__${alternativeIndex}`;
             return (
               <Widget.Topic
@@ -100,7 +105,7 @@ export default function QuizPage() {
   const totalQuestions = db.questions.length;
   const [currentQuestion, setCurrentQuestion] = React.useState(0);
   const questionIndex = currentQuestion;
-  const question = db.questions[questionIndex];
+  const question = db.questions[ questionIndex ];
 
   // [React chama de: Efeitos || Effects]
   // React.useEffect
