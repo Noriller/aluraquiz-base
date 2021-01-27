@@ -45,6 +45,10 @@ class MathOperation {
     throw new Error( 'You have to implement the method do something!' );
   }
 
+  getResultIndex ( result, array ) {
+    return array.indexOf( result );
+  }
+
   getAnswerArray ( result ) {
     const resultSpreader = new Set();
     resultSpreader.add( 0 );
@@ -61,7 +65,10 @@ class MathOperation {
       result + spreaderArray[ 3 ],
       result + spreaderArray[ 4 ]
     ];
-    return this.shuffleAnswer( answerArray );
+    const shuffledAnswer = this.shuffleAnswer( answerArray );
+    const resultIndex = this.getResultIndex( result, shuffledAnswer );
+
+    return { resultIndex, shuffledAnswer };
   }
 
   randomResultSpreader ( result, resultSpreader ) {
@@ -91,12 +98,12 @@ class Addition extends MathOperation {
     const firstValue = this.getRandom();
     const secondValue = this.getRandom();
     const result = firstValue + secondValue;
-    const answerArray = this.getAnswerArray( result );
+    const { resultIndex, shuffledAnswer } = this.getAnswerArray( result );
 
     return {
-      "value": `${ firstValue } + ${ secondValue } = ???`,
-      "result": result,
-      "answerArray": answerArray
+      "mathQuestion": `${ firstValue } + ${ secondValue } = ???`,
+      "result": resultIndex,
+      "answerArray": shuffledAnswer
     };
   }
 
@@ -108,12 +115,12 @@ class Subtraction extends MathOperation {
     const secondValue = this.getRandom();
     const firstIsBigger = firstValue >= secondValue ? true : false;
     const result = firstIsBigger ? firstValue - secondValue : secondValue - firstValue;
-    const answerArray = this.getAnswerArray( result );
+    const { resultIndex, shuffledAnswer } = this.getAnswerArray( result );
 
     return {
-      "value": `${ firstIsBigger ? firstValue : secondValue } - ${ firstIsBigger ? secondValue : firstValue } = ???`,
-      "result": result,
-      "answerArray": answerArray
+      "mathQuestion": `${ firstIsBigger ? firstValue : secondValue } - ${ firstIsBigger ? secondValue : firstValue } = ???`,
+      "result": resultIndex,
+      "answerArray": shuffledAnswer
     };
   }
 }
@@ -123,12 +130,12 @@ class Multiplication extends MathOperation {
     const firstValue = this.getRandom();
     const secondValue = this.limiter ? this.getRandom( this.lowerBoundary, this.limiter ) : this.getRandom();
     const result = firstValue * secondValue;
-    const answerArray = this.getAnswerArray( result );
+    const { resultIndex, shuffledAnswer } = this.getAnswerArray( result );
 
     return {
-      "value": `${ firstValue } * ${ secondValue } = ???`,
-      "result": result,
-      "answerArray": answerArray
+      "mathQuestion": `${ firstValue } * ${ secondValue } = ???`,
+      "result": resultIndex,
+      "answerArray": shuffledAnswer
     };
   }
 }
@@ -138,12 +145,12 @@ class Division extends MathOperation {
     const firstValue = this.limiter ? this.getRandom( this.lowerBoundary, this.limiter ) : this.getRandom();
     const secondValue = this.getRandom() * firstValue;
     const result = secondValue / firstValue;
-    const answerArray = this.getAnswerArray( result );
+    const { resultIndex, shuffledAnswer } = this.getAnswerArray( result );
 
     return {
-      "value": `${ secondValue } / ${ firstValue } = ???`,
-      "result": result,
-      "answerArray": answerArray
+      "mathQuestion": `${ secondValue } / ${ firstValue } = ???`,
+      "result": resultIndex,
+      "answerArray": shuffledAnswer
     };
   }
 }

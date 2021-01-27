@@ -1,12 +1,13 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
-import db from '../db.json';
 import Widget from '../src/components/Widget';
 import QuizLogo from '../src/components/QuizLogo';
 import QuizBackground from '../src/components/QuizBackground';
 import QuizContainer from '../src/components/QuizContainer';
 import Button from '../src/components/Button';
-import QuestionGenerator from '../src/QuestionGenerator';
+
+import DBGenerator from '../src/DBGenerator';
+const db = DBGenerator();
 
 function LoadingWidget() {
   return (
@@ -29,8 +30,6 @@ function QuestionWidget({
   onSubmit,
 }) {
   const questionId = `question__${ questionIndex }`;
-  const { value: mathQuestion, result, answerArray } = new QuestionGenerator( question.questionLoad );
-  console.log( mathQuestion, result, answerArray )
 
   return (
     <Widget>
@@ -52,8 +51,7 @@ function QuestionWidget({
       />
       <Widget.Content>
         <h2>
-          <div>{ question.title }</div>
-          <div>{ mathQuestion }</div>
+          { question.title }
         </h2>
         <p>
           {question.description}
@@ -65,7 +63,7 @@ function QuestionWidget({
             onSubmit();
           }}
         >
-          { answerArray.map( ( alternative, alternativeIndex ) => {
+          { question.alternatives.map( ( alternative, alternativeIndex ) => {
             const alternativeId = `alternative__${alternativeIndex}`;
             return (
               <Widget.Topic
