@@ -72,7 +72,7 @@ class MathOperation {
   }
 
   addOrSub ( spreader ) {
-    return ( spreader / 2 == 0 ) ? spreader : ( spreader * -1 );
+    return ( spreader % 2 == 0 ) ? spreader : ( spreader * -1 );
   }
 
   randomResultSpreader ( result, resultSpreader ) {
