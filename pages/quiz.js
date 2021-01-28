@@ -148,6 +148,7 @@ export default function QuizPage ( { db } ) {
 
 export async function getStaticProps () {
   const db = DBGenerator();
+  console.log( db )
   return {
     props: { db },
     revalidate: 60 * 10 // 10 minutes
