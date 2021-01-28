@@ -7,7 +7,6 @@ import QuizContainer from '../src/components/QuizContainer';
 import Button from '../src/components/Button';
 
 import DBGenerator from '../src/DBGenerator';
-const db = DBGenerator();
 
 function LoadingWidget() {
   return (
@@ -98,7 +97,7 @@ const screenStates = {
   LOADING: 'LOADING',
   RESULT: 'RESULT',
 };
-export default function QuizPage() {
+export default function QuizPage ( { db } ) {
   const [screenState, setScreenState] = React.useState(screenStates.LOADING);
   const totalQuestions = db.questions.length;
   const [currentQuestion, setCurrentQuestion] = React.useState(0);
@@ -145,4 +144,12 @@ export default function QuizPage() {
       </QuizContainer>
     </QuizBackground>
   );
+}
+
+export async function getStaticProps () {
+  const db = DBGenerator();
+  return {
+    props: { db },
+    revalidate: 200
+  };
 }
