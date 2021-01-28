@@ -150,6 +150,6 @@ export async function getStaticProps () {
   const db = DBGenerator();
   return {
     props: { db },
-    revalidate: 200
+    revalidate: 60 * 10 // 10 minutes
   };
 }
