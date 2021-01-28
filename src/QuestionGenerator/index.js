@@ -1,6 +1,6 @@
+/* eslint-disable space-in-parens */
 
 export default class QuestionGenerator {
-
   constructor ( questionLoad ) {
     this.lowerBoundary = questionLoad.lowerBoundary;
     this.upperBoundary = questionLoad.upperBoundary;
@@ -33,7 +33,7 @@ class MathOperation {
     this.upperBoundary = upperBoundary;
     this.limiter = limiter || null;
     if ( new.target === MathOperation ) {
-      throw new TypeError( "Cannot construct MathOperation instances directly" );
+      throw new TypeError( 'Cannot construct MathOperation instances directly' );
     }
   }
 
@@ -59,16 +59,20 @@ class MathOperation {
     const spreaderArray = [ ...resultSpreader ];
 
     const answerArray = [
-      result - spreaderArray[ 1 ],
-      result - spreaderArray[ 2 ],
+      result + this.addOrSub( spreaderArray[ 1 ] ),
+      result + this.addOrSub( spreaderArray[ 2 ] ),
       result,
-      result + spreaderArray[ 3 ],
-      result + spreaderArray[ 4 ]
+      result + this.addOrSub( spreaderArray[ 3 ] ),
+      result + this.addOrSub( spreaderArray[ 4 ] )
     ];
     const shuffledAnswer = this.shuffleAnswer( answerArray );
     const resultIndex = this.getResultIndex( result, shuffledAnswer );
 
     return { resultIndex, shuffledAnswer };
+  }
+
+  addOrSub ( spreader ) {
+    return ( spreader / 2 == 0 ) ? spreader : ( spreader * -1 );
   }
 
   randomResultSpreader ( result, resultSpreader ) {
@@ -81,8 +85,9 @@ class MathOperation {
   }
 
   shuffleAnswer ( array ) {
-    let currentIndex = array.length, temporaryValue, randomIndex;
-    while ( 0 !== currentIndex ) {
+    let currentIndex = array.length; let temporaryValue; let
+      randomIndex;
+    while ( currentIndex !== 0 ) {
       randomIndex = Math.floor( Math.random() * currentIndex );
       currentIndex -= 1;
       temporaryValue = array[ currentIndex ];
@@ -101,26 +106,25 @@ class Addition extends MathOperation {
     const { resultIndex, shuffledAnswer } = this.getAnswerArray( result );
 
     return {
-      "mathQuestion": `${ firstValue } + ${ secondValue } = ???`,
-      "result": resultIndex,
-      "answerArray": shuffledAnswer
+      mathQuestion: `${ firstValue } + ${ secondValue } = ???`,
+      result: resultIndex,
+      answerArray: shuffledAnswer,
     };
   }
-
 }
 
 class Subtraction extends MathOperation {
   getQuestion () {
     const firstValue = this.getRandom();
     const secondValue = this.getRandom();
-    const firstIsBigger = firstValue >= secondValue ? true : false;
+    const firstIsBigger = firstValue >= secondValue;
     const result = firstIsBigger ? firstValue - secondValue : secondValue - firstValue;
     const { resultIndex, shuffledAnswer } = this.getAnswerArray( result );
 
     return {
-      "mathQuestion": `${ firstIsBigger ? firstValue : secondValue } - ${ firstIsBigger ? secondValue : firstValue } = ???`,
-      "result": resultIndex,
-      "answerArray": shuffledAnswer
+      mathQuestion: `${ firstIsBigger ? firstValue : secondValue } - ${ firstIsBigger ? secondValue : firstValue } = ???`,
+      result: resultIndex,
+      answerArray: shuffledAnswer,
     };
   }
 }
@@ -133,9 +137,9 @@ class Multiplication extends MathOperation {
     const { resultIndex, shuffledAnswer } = this.getAnswerArray( result );
 
     return {
-      "mathQuestion": `${ firstValue } * ${ secondValue } = ???`,
-      "result": resultIndex,
-      "answerArray": shuffledAnswer
+      mathQuestion: `${ firstValue } * ${ secondValue } = ???`,
+      result: resultIndex,
+      answerArray: shuffledAnswer,
     };
   }
 }
@@ -148,9 +152,9 @@ class Division extends MathOperation {
     const { resultIndex, shuffledAnswer } = this.getAnswerArray( result );
 
     return {
-      "mathQuestion": `${ secondValue } / ${ firstValue } = ???`,
-      "result": resultIndex,
-      "answerArray": shuffledAnswer
+      mathQuestion: `${ secondValue } / ${ firstValue } = ???`,
+      result: resultIndex,
+      answerArray: shuffledAnswer,
     };
   }
 }

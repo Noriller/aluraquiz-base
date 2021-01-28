@@ -19,5 +19,13 @@ module.exports = {
   ],
   rules: {
     'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
+    'no-use-before-define': [ 'off', { functions: false, classes: false } ],
+    'max-classes-per-file': [ 'off', 1 ],
+    'class-methods-use-this': [ 'off' ],
+    'linebreak-style': [ 'off' ],
+    'array-bracket-spacing': [ 'off' ],
+    'space-in-parens:': [ 'off' ],
+    'max-len': [ 'off' ],
+    'computed-property-spacing': [ 'off' ]
   },
 };
