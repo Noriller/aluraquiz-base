@@ -63,11 +63,11 @@ export default function Home() {
               <Input
                 name="nomeDoUsuario"
                 onChange={(infosDoEvento) => setName(infosDoEvento.target.value)}
-                placeholder="Diz ai seu nome"
+                placeholder="Who is challenging the Math?"
                 value={name}
               />
               <Button type="submit" disabled={name.length === 0}>
-                {`Jogar ${name}`}
+                { `Ready Player ${ name }` }
               </Button>
             </form>
           </Widget.Content>

@@ -12,7 +12,13 @@ import BackLinkArrow from '../../components/BackLinkArrow';
 
 import loadingAnimation from './animations/loading.json';
 
-import DBGenerator from '../../DBGenerator';
+import { CheckCircle } from '@styled-icons/boxicons-regular/CheckCircle';
+import { Check } from '@styled-icons/boxicons-regular/Check';
+import { CloseCircleOutline } from '@styled-icons/evaicons-outline/CloseCircleOutline';
+
+const RightAnswer = () => <CheckCircle size="19" color="#00ff15" />;
+const WrongAnswer = () => <CloseCircleOutline size="19" color="#ff0000" />;
+const TheRightAlternative = () => <Check size="19" color="#42ff52" />;
 
 function ResultWidget({ results }) {
   return (
@@ -91,7 +97,7 @@ function QuestionWidget({
       <Widget.Header>
         <BackLinkArrow href="/" />
         <h3>
-          {`Pergunta ${questionIndex + 1} de ${totalQuestions}`}
+          { `Challenge ${ questionIndex + 1 } of ${ totalQuestions }` }
         </h3>
       </Widget.Header>
 
@@ -128,6 +134,11 @@ function QuestionWidget({
             const alternativeId = `alternative__${alternativeIndex}`;
             const alternativeStatus = isCorrect ? 'SUCCESS' : 'ERROR';
             const isSelected = selectedAlternative === alternativeIndex;
+            const isRightAnswer = alternativeIndex === question.answer;
+            const gotItRight = isQuestionSubmited && isCorrect && isSelected;
+            const gotItWrong = isQuestionSubmited && !isCorrect && isSelected;
+            const showTheRightAlternative = isQuestionSubmited && !isCorrect && isRightAnswer;
+
             return (
               <Widget.Topic
                 as="label"
@@ -144,7 +155,10 @@ function QuestionWidget({
                   onChange={ () => setSelectedAlternative( alternativeIndex ) }
                   type="radio"
                 />
-                {alternative}
+                {alternative }
+                {gotItRight && <RightAnswer /> }
+                {gotItWrong && <WrongAnswer /> }
+                {showTheRightAlternative && <TheRightAlternative /> }
               </Widget.Topic>
             );
           })}
@@ -153,10 +167,8 @@ function QuestionWidget({
             {JSON.stringify(question, null, 4)}
           </pre> */}
           <Button type="submit" disabled={!hasAlternativeSelected}>
-            Confirmar
+            Confirm
           </Button>
-          {isQuestionSubmited && isCorrect && <p>Você acertou!</p>}
-          {isQuestionSubmited && !isCorrect && <p>Você errou!</p>}
         </AlternativesForm>
       </Widget.Content>
     </Widget>
