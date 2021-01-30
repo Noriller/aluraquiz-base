@@ -1,6 +1,8 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 import { Lottie } from '@crello/react-lottie';
+import { useRouter } from 'next/router';
+
 // import db from '../../../db.json';
 import Widget from '../../components/Widget';
 import QuizLogo from '../../components/QuizLogo';
@@ -9,55 +11,68 @@ import QuizContainer from '../../components/QuizContainer';
 import AlternativesForm from '../../components/AlternativesForm';
 import Button from '../../components/Button';
 import BackLinkArrow from '../../components/BackLinkArrow';
+import ResultsTopics from '../../components/ResultTopics';
 
 import loadingAnimation from './animations/loading.json';
+import { RightAnswer, WrongAnswer, TheRightAlternative } from '../../components/Icons/AnswerIcons';
 
-import { CheckCircle } from '@styled-icons/boxicons-regular/CheckCircle';
-import { Check } from '@styled-icons/boxicons-regular/Check';
-import { CloseCircleOutline } from '@styled-icons/evaicons-outline/CloseCircleOutline';
 
-const RightAnswer = () => <CheckCircle size="19" color="#00ff15" />;
-const WrongAnswer = () => <CloseCircleOutline size="19" color="#ff0000" />;
-const TheRightAlternative = () => <Check size="19" color="#42ff52" />;
+function ResultWidget ( { results, questions } ) {
+  const rightAnswers = questions.map( q => q.answer );
+  const totalScore = results.map( ( r, i ) => {
+    return ( r === rightAnswers[ i ] ) ? 1 : 0;
+  } ).filter( ( x ) => x ).length;
 
-function ResultWidget({ results }) {
+  const scoreDisplay = questions.map( ( q, i ) => (
+    {
+      title: q.title,
+      hit: q.answer === results[ i ],
+      yourAnswer: q.alternatives[ results[ i ] ],
+      rightAnswer: q.alternatives[ q.answer ],
+    }
+  ) );
+
+  const router = useRouter();
+  const { name } = router.query;
+
   return (
     <Widget>
       <Widget.Header>
-        Tela de Resultado:
+        <BackLinkArrow href="/" />
+        { resultMessage( totalScore, name ) }
       </Widget.Header>
 
       <Widget.Content>
-        <p>
-          Você acertou
-          {' '}
-          {/* {results.reduce((somatoriaAtual, resultAtual) => {
-            const isAcerto = resultAtual === true;
-            if (isAcerto) {
-              return somatoriaAtual + 1;
-            }
-            return somatoriaAtual;
-          }, 0)} */}
-          {results.filter((x) => x).length}
-          {' '}
-          perguntas
-        </p>
         <ul>
-          {results.map((result, index) => (
-            <li key={`result__${index}`}>
-              #
-              {index + 1}
-              {' '}
-              Resultado:
-              {result === true
-                ? 'Acertou'
-                : 'Errou'}
-            </li>
+          { scoreDisplay.map( ( score, i ) => (
+            <ResultsTopics
+              key={ `score_for_question_${ i }` }
+              title={ score.title }
+              hit={ score.hit }
+              index={ i + 1 }
+              yourAnswer={ score.yourAnswer }
+              rightAnswer={ score.rightAnswer }
+            />
           ))}
         </ul>
       </Widget.Content>
     </Widget>
   );
+}
+
+function resultMessage ( totalScore, name ) {
+  switch ( totalScore ) {
+    case 10:
+      return `${ name } you rock! Everything right!`;
+    case 9, 8, 7:
+      return `${ name } you're awesome! ${ totalScore }0% right!`;
+    case 6, 5:
+      return `${ name } you did... alright. ${ totalScore }0% right!`;
+    case 4, 3, 2, 1:
+      return `${ name } you should study more... Only ${ totalScore }0% right!`;
+    default:
+      return `${ name }, Ow... Not even one? How's that possible?`;
+  }
 }
 
 function LoadingWidget() {
@@ -123,7 +138,7 @@ function QuestionWidget({
             infosDoEvento.preventDefault();
             setIsQuestionSubmited(true);
             setTimeout(() => {
-              addResult(isCorrect);
+              addResult( selectedAlternative );
               onSubmit();
               setIsQuestionSubmited(false);
               setSelectedAlternative(undefined);
@@ -218,11 +233,15 @@ export default function QuizPage ( { externalQuestions, externalBg } ) {
     }
   }
 
+  const quizPage = screenState === screenStates.QUIZ;
+  const loadingPage = screenState === screenStates.LOADING;
+  const resultPage = screenState === screenStates.RESULT;
+
   return (
     <QuizBackground backgroundImage={ bg }>
-      <QuizContainer>
+      <QuizContainer maxWidth={ resultPage ? '70%' : null }>
         <QuizLogo />
-        {screenState === screenStates.QUIZ && (
+        { quizPage && (
           <QuestionWidget
             question={question}
             questionIndex={questionIndex}
@@ -232,9 +251,9 @@ export default function QuizPage ( { externalQuestions, externalBg } ) {
           />
         )}
 
-        {screenState === screenStates.LOADING && <LoadingWidget />}
+        { loadingPage && <LoadingWidget /> }
 
-        {screenState === screenStates.RESULT && <ResultWidget results={results} />}
+        { resultPage && <ResultWidget results={ results } questions={ externalQuestions } /> }
       </QuizContainer>
     </QuizBackground>
   );

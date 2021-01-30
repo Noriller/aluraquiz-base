@@ -11,13 +11,14 @@ export default function DBGenerator () {
     const load = q.questionLoad;
     const { mathQuestion, result, answerArray } = new QuestionGenerator( load );
 
-    const newQuestion = new Object();
-    newQuestion.image = q.image;
-    newQuestion.title = `${ q.title } ${ mathQuestion }`;
-    newQuestion.description = q.description;
-    newQuestion.answer = result;
-    newQuestion.alternatives = answerArray;
-
+    const newQuestion = {
+      image: q.image,
+      title: `${ q.title } ${ mathQuestion }`,
+      description: q.description,
+      answer: result,
+      alternatives: answerArray,
+    }
+    
     newQuestions.push( newQuestion );
 
   } );
