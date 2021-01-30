@@ -1,10 +1,12 @@
-import db from '../../db.json';
+import DBGenerator from '../../src/DBGenerator';
 
-export default function dbHandler(request, response) {
+export default function dbHandler ( request, response ) {
   if (request.method === 'OPTIONS') {
     response.status(200).end();
     return;
   }
+
+  const db = DBGenerator();
 
   response.setHeader('Access-Control-Allow-Credentials', true);
   response.setHeader('Access-Control-Allow-Origin', '*');
