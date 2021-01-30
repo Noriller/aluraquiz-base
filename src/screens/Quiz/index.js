@@ -1,3 +1,4 @@
+/* eslint-disable nonblock-statement-body-position */
 /* eslint-disable react/prop-types */
 import React from 'react';
 import { Lottie } from '@crello/react-lottie';
@@ -18,6 +19,7 @@ import { RightAnswer, WrongAnswer, TheRightAlternative } from '../../components/
 
 
 function ResultWidget ( { results, questions } ) {
+  const totalQuestions = questions.length;
   const rightAnswers = questions.map( q => q.answer );
   const totalScore = results.map( ( r, i ) => {
     return ( r === rightAnswers[ i ] ) ? 1 : 0;
@@ -39,7 +41,7 @@ function ResultWidget ( { results, questions } ) {
     <Widget>
       <Widget.Header>
         <BackLinkArrow href="/" />
-        { resultMessage( totalScore, name ) }
+        { resultMessage( totalQuestions, totalScore, name ) }
       </Widget.Header>
 
       <Widget.Content>
@@ -60,19 +62,23 @@ function ResultWidget ( { results, questions } ) {
   );
 }
 
-function resultMessage ( totalScore, name ) {
-  switch ( totalScore ) {
-    case 10:
-      return `${ name } you rock! Everything right!`;
-    case 9, 8, 7:
-      return `${ name } you're awesome! ${ totalScore }0% right!`;
-    case 6, 5:
-      return `${ name } you did... alright. ${ totalScore }0% right!`;
-    case 4, 3, 2, 1:
-      return `${ name } you should study more... Only ${ totalScore }0% right!`;
-    default:
-      return `${ name }, Ow... Not even one? How's that possible?`;
-  }
+function resultMessage ( totalQuestions, totalScore, name ) {
+  const percentage = ( totalScore / totalQuestions );
+  const percentageDisplay = Math.round( percentage * 100 );
+
+  if ( percentage === 1 )
+    return `${ name } you rock! Everything right!`;
+
+  if ( percentage > 0.7 )
+    return `${ name } you're awesome! ${ percentageDisplay }% right!`;
+
+  if ( percentage > 0.5 )
+    return `${ name } you did... alright. ${ percentageDisplay }% right!`;
+
+  if ( percentage > 0.001 )
+    return `${ name } you should study more... Only ${ percentageDisplay }% right!`;
+
+  return `${ name }, Ow... Not even one? How's that possible?`;
 }
 
 function LoadingWidget() {

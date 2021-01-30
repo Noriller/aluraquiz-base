@@ -13,6 +13,7 @@ import Footer from '../src/components/Footer';
 import GitHubCorner from '../src/components/GitHubCorner';
 import Input from '../src/components/Input';
 import Button from '../src/components/Button';
+import { TooltipCard, TooltipBox, TooltipText } from '../src/components/Tooltip';
 
 const QuizContainer = styled.div`
   width: 100%;
@@ -27,7 +28,7 @@ const QuizContainer = styled.div`
 
 export default function Home() {
   const router = useRouter();
-  const [name, setName] = React.useState('');
+  const [ name, setName ] = React.useState( '' );
 
   return (
     <QuizBackground backgroundImage={db.bg}>
@@ -84,7 +85,7 @@ export default function Home() {
           animate="show"
         >
           <Widget.Content>
-            <h1>Quizes da Galera</h1>
+            <h1>Or play some other awesome quizzes!</h1>
 
             <ul>
               {db.external.map((linkExterno) => {
@@ -95,13 +96,12 @@ export default function Home() {
                   .split('.');
 
                 return (
-                  <li key={linkExterno}>
-                    <Widget.Topic
-                      as={Link}
-                      href={`/quiz/${projectName}___${githubUser}`}
-                    >
-                      {`${githubUser}/${projectName}`}
-                    </Widget.Topic>
+                  <li key={ linkExterno }>
+                    <ExternalQuizLink
+                      projectName={ projectName }
+                      githubUser={ githubUser }
+                      name={ name }
+                    />
                   </li>
                 );
               })}
@@ -123,3 +123,30 @@ export default function Home() {
     </QuizBackground>
   );
 }
+function ExternalQuizLink ( { projectName, githubUser, name } ) {
+  const [ isHovering, setIsHovering ] = React.useState( false );
+  const shouldShowTopic = ( isHovering && name ) || !isHovering;
+
+  function handleMouse () {
+    setIsHovering( !isHovering );
+  }
+
+  return (
+    <div
+      onMouseEnter={ handleMouse }
+      onMouseLeave={ handleMouse }
+    >
+      <Widget.Topic
+        as={ Link }
+        href={ `/quiz/${ projectName }___${ githubUser }` }
+        style={ shouldShowTopic ? null : { display: 'none' } }
+      >
+        { `${ githubUser }/${ projectName }` }
+      </Widget.Topic>
+      <Widget.Topic style={ !shouldShowTopic ? null : { display: 'none' } }>
+        Can you give me your name?
+      </Widget.Topic>
+    </div>
+  );
+}
+
