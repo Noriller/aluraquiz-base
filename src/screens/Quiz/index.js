@@ -18,7 +18,7 @@ import loadingAnimation from './animations/loading.json';
 import { RightAnswer, WrongAnswer, TheRightAlternative } from '../../components/Icons/AnswerIcons';
 
 
-function ResultWidget ( { results, questions } ) {
+function ResultWidget ( { results, questions, nextBatch } ) {
   const totalQuestions = questions.length;
   const rightAnswers = questions.map( q => q.answer );
   const totalScore = results.map( ( r, i ) => {
@@ -37,11 +37,41 @@ function ResultWidget ( { results, questions } ) {
   const router = useRouter();
   const { name } = router.query;
 
+  const batchTime = nextBatch ?? new Date( '9999/01/01 00:00:00' );
+  const initialTimeDiff = batchTime - new Date();
+  const [ timeLeft, setTimeLeft ] = React.useState( initialTimeDiff );
+
+  React.useEffect( () => {
+    setTimeout( () => {
+      setTimeLeft( initialTimeDiff - 1 );
+    }, 1000 );
+  }, [ timeLeft ] );
+
+  function getDisplayTimeLeft () {
+    const date = new Date( timeLeft );
+    const minutes = date.getMinutes();
+    const seconds = date.getSeconds();
+
+    return `${ minutes }:${ seconds.toString().padStart( 2, '0' ) }`;
+  }
+
   return (
     <Widget>
-      <Widget.Header>
+      <Widget.Header style={ { justifyContent: 'space-between' } }>
         <BackLinkArrow href="/" />
-        { resultMessage( totalQuestions, totalScore, name ) }
+        <div>
+          { resultMessage( totalQuestions, totalScore, name ) }
+        </div>
+        <div>
+          { nextBatch ? (
+            <Widget.FlexDiv>
+              <div>More Challenges in:</div>
+              <div>
+                { getDisplayTimeLeft() }
+              </div>
+            </Widget.FlexDiv>
+          ) : '' }
+        </div>
       </Widget.Header>
 
       <Widget.Content>
@@ -78,7 +108,7 @@ function resultMessage ( totalQuestions, totalScore, name ) {
   if ( percentage > 0.001 )
     return `${ name } you should study more... Only ${ percentageDisplay }% right!`;
 
-  return `${ name }, Ow... Not even one? How's that possible?`;
+  return `${ name }, Ow... Not even one? How's that even possible?`;
 }
 
 function LoadingWidget() {
@@ -201,7 +231,7 @@ const screenStates = {
   LOADING: 'LOADING',
   RESULT: 'RESULT',
 };
-export default function QuizPage ( { externalQuestions, externalBg } ) {
+export default function QuizPage ( { externalQuestions, externalBg, time } ) {
   const [screenState, setScreenState] = React.useState(screenStates.LOADING);
   const [results, setResults] = React.useState([]);
   const [currentQuestion, setCurrentQuestion] = React.useState(0);
@@ -209,6 +239,7 @@ export default function QuizPage ( { externalQuestions, externalBg } ) {
   const question = externalQuestions[ questionIndex ];
   const totalQuestions = externalQuestions.length;
   const bg = externalBg;
+  const nextBatch = time ? new Date( new Date( time ).getTime() + 1000 * 60 * 10 ) : null;
 
   function addResult(result) {
     // results.push(result);
@@ -259,7 +290,13 @@ export default function QuizPage ( { externalQuestions, externalBg } ) {
 
         { loadingPage && <LoadingWidget /> }
 
-        { resultPage && <ResultWidget results={ results } questions={ externalQuestions } /> }
+        { resultPage && (
+          <ResultWidget
+            results={ results }
+            questions={ externalQuestions }
+            nextBatch={ nextBatch }
+          />
+        ) }
       </QuizContainer>
     </QuizBackground>
   );

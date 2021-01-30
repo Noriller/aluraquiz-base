@@ -4,12 +4,13 @@ import { ThemeProvider } from 'styled-components';
 import QuizScreen from '../../src/screens/Quiz';
 import DBGenerator from '../../src/DBGenerator';
 
-export default function QuizDaGaleraPage ( { db } ) {
+export default function QuizDaGaleraPage ( { db, time } ) {
   return (
-    <ThemeProvider theme={db.theme}>
+    <ThemeProvider theme={ db.theme }>
       <QuizScreen
         externalQuestions={db.questions}
-        externalBg={db.bg}
+        externalBg={ db.bg }
+        time={ time }
       />
     </ThemeProvider>
   );
@@ -17,8 +18,9 @@ export default function QuizDaGaleraPage ( { db } ) {
 
 export async function getStaticProps () {
   const db = DBGenerator();
+  const time = new Date().getTime();
   return {
-    props: { db },
+    props: { db, time },
     revalidate: 60 * 10 // 10 minutes
   };
 }

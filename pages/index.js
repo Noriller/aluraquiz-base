@@ -138,7 +138,7 @@ function ExternalQuizLink ( { projectName, githubUser, name } ) {
     >
       <Widget.Topic
         as={ Link }
-        href={ `/quiz/${ projectName }___${ githubUser }` }
+        href={ `/quiz/${ projectName }___${ githubUser }?name=${ name }` }
         style={ shouldShowTopic ? null : { display: 'none' } }
       >
         { `${ githubUser }/${ projectName }` }

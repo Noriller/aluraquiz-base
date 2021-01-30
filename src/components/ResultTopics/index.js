@@ -14,12 +14,18 @@ const FlexResult = styled.div`
   flex-wrap: nowrap;
   flex-grow: 1;
 `;
-const DivMarginLeft = styled.div`
+const FlexDiv = styled.div`
+  display: flex;
+  align-items: center;
+  
+  /* &.answerBlock {
+    border: dashed;
+    border-width: thin;
+  } */
+`;
+const DivMarginLeft = styled( FlexDiv )`
   display: flex;
   margin-left: 5px
-`;
-const FlexDiv = styled.div`
-  display: flex
 `;
 
 const ResultDiv = styled.div`
@@ -47,7 +53,7 @@ export default function ResultsTopics ( { title, hit, index, yourAnswer, rightAn
         <FlexDiv className="coxinha">
           { ( hit ?
             (
-              <FlexDiv>
+              <FlexDiv className="answerBlock">
                 { yourAnswer }
                 <DivMarginLeft>
                   <RightAnswer />
@@ -55,13 +61,13 @@ export default function ResultsTopics ( { title, hit, index, yourAnswer, rightAn
               </FlexDiv>
             ) : (
               <FlexDiv>
-                <FlexDiv>
+                <FlexDiv className="answerBlock">
                   { yourAnswer }
                   <DivMarginLeft>
                     <WrongAnswer />
                   </DivMarginLeft>
                 </FlexDiv>
-                <DivMarginLeft>
+                <DivMarginLeft className="answerBlock">
                   { rightAnswer }
                   <DivMarginLeft>
                     <TheRightAlternative />

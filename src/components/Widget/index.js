@@ -66,4 +66,8 @@ Widget.Topic = styled.a`
   }
 `;
 
+Widget.FlexDiv = styled.div`
+  display: flex; flex-direction: column; align-items: center;
+`;
+
 export default Widget;
