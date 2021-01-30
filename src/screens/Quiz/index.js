@@ -12,7 +12,7 @@ import BackLinkArrow from '../../components/BackLinkArrow';
 
 import loadingAnimation from './animations/loading.json';
 
-import DBGenerator from '../src/DBGenerator';
+import DBGenerator from '../../DBGenerator';
 
 function ResultWidget({ results }) {
   return (
@@ -168,13 +168,14 @@ const screenStates = {
   LOADING: 'LOADING',
   RESULT: 'RESULT',
 };
-export default function QuizPage ( { db } ) {
+export default function QuizPage ( { externalQuestions, externalBg } ) {
   const [screenState, setScreenState] = React.useState(screenStates.LOADING);
   const [results, setResults] = React.useState([]);
   const [currentQuestion, setCurrentQuestion] = React.useState(0);
   const questionIndex = currentQuestion;
-  const question = db.questions[ questionIndex ];
-  const totalQuestions = db.questions.length;
+  const question = externalQuestions[ questionIndex ];
+  const totalQuestions = externalQuestions.length;
+  const bg = externalBg;
 
   function addResult(result) {
     // results.push(result);
@@ -206,7 +207,7 @@ export default function QuizPage ( { db } ) {
   }
 
   return (
-    <QuizBackground backgroundImage={db.bg}>
+    <QuizBackground backgroundImage={ bg }>
       <QuizContainer>
         <QuizLogo />
         {screenState === screenStates.QUIZ && (
@@ -225,12 +226,4 @@ export default function QuizPage ( { db } ) {
       </QuizContainer>
     </QuizBackground>
   );
-}
-
-export async function getStaticProps () {
-  const db = DBGenerator();
-  return {
-    props: { db },
-    revalidate: 60 * 10 // 10 minutes
-  };
 }

@@ -2,9 +2,9 @@
 import React from 'react';
 import { ThemeProvider } from 'styled-components';
 import QuizScreen from '../../src/screens/Quiz';
-import db from '../../db.json';
+import DBGenerator from '../../src/DBGenerator';
 
-export default function QuizDaGaleraPage() {
+export default function QuizDaGaleraPage ( { db } ) {
   return (
     <ThemeProvider theme={db.theme}>
       <QuizScreen
@@ -13,4 +13,12 @@ export default function QuizDaGaleraPage() {
       />
     </ThemeProvider>
   );
+}
+
+export async function getStaticProps () {
+  const db = DBGenerator();
+  return {
+    props: { db },
+    revalidate: 60 * 10 // 10 minutes
+  };
 }
