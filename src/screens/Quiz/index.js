@@ -65,10 +65,21 @@ function ResultWidget ( { results, questions, nextBatch } ) {
         <div>
           { nextBatch ? (
             <Widget.FlexDiv>
-              <div>More Challenges in:</div>
-              <div>
-                { getDisplayTimeLeft() }
-              </div>
+              { ( timeLeft > 0 )
+                ? (
+                  <>
+                    <div>More Challenges in:</div>
+                    <div>
+                      { getDisplayTimeLeft() }
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div>More challenges?</div>
+                    <div>Reload the Page!</div>
+                  </>
+                )
+              }
             </Widget.FlexDiv>
           ) : '' }
         </div>
@@ -178,7 +189,7 @@ function QuestionWidget({
               onSubmit();
               setIsQuestionSubmited(false);
               setSelectedAlternative(undefined);
-            }, 3 * 1000);
+            }, 3 * 1000 );
           }}
         >
           { question.alternatives.map( ( alternative, alternativeIndex ) => {
