@@ -64,7 +64,7 @@ export default function Home() {
               <Input
                 name="nomeDoUsuario"
                 onChange={(infosDoEvento) => setName(infosDoEvento.target.value)}
-                placeholder="Who is challenging the Math?"
+                placeholder="Who's challenging this Math Quizz?"
                 value={name}
               />
               <Button type="submit" disabled={name.length === 0}>
